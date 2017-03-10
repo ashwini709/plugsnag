@@ -31,7 +31,9 @@ defmodule Plugsnag do
           |> Map.delete(:__struct__)
           |> Keyword.new
 
-        apply(reporter(), :report, [exception | [options]])
+        if Application.get_env(:bugsnag, :use_logger) do
+          apply(reporter(), :report, [exception | [options]])
+        end
       end
     end
   end

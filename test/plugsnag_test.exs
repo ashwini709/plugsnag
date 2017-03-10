@@ -34,6 +34,8 @@ defmodule PlugsnagTest do
   end
 
   test "Raising an error on failure" do
+    Application.put_env(:bugsnag, :use_logger, true)
+
     conn = conn(:get, "/")
 
     assert_raise TestException, "oops", fn ->
@@ -44,6 +46,8 @@ defmodule PlugsnagTest do
   end
 
   test "includes connection metadata in the report" do
+    Application.put_env(:bugsnag, :use_logger, true)
+
     conn = conn(:get, "/?hello=computer")
 
     catch_error TestPlug.call(conn, [])
@@ -54,6 +58,8 @@ defmodule PlugsnagTest do
   end
 
   test "allows modifying bugsnag report options before it's sent" do
+    Application.put_env(:bugsnag, :use_logger, true)
+
     defmodule TestErrorReportBuilder do
       @behaviour Plugsnag.ErrorReportBuilder
 
@@ -83,6 +89,18 @@ defmodule PlugsnagTest do
     assert Keyword.get(options, :user) == %{
      id: "abc123"
     }
+  end
+
+  test "does not send bugsnag report if bugsnag config has use_logger false" do
+    Application.put_env(:bugsnag, :use_logger, false)
+
+    conn = conn(:get, "/")
+
+    assert_raise TestException, "oops", fn ->
+      TestPlug.call(conn, [])
+    end
+
+    refute_receive :report
   end
 
 end

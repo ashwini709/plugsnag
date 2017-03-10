@@ -22,7 +22,7 @@ defmodule Plugsnag.Mixfile do
   end
 
   def application do
-    [applications: []]
+    [applications: [:bugsnag]]
   end
 
   defp deps do
