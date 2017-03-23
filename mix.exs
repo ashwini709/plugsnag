@@ -26,7 +26,7 @@ defmodule Plugsnag.Mixfile do
   end
 
   defp deps do
-    [{:bugsnag, "~> 1.3"},
+    [{:bugsnag, git: "https://github.com/ashwini709/bugsnag-elixir.git", branch: "notify_release_stages"},
      {:plug, "~> 1.0"},
      {:ex_doc, ">= 0.0.0", only: :dev},
      {:dialyxir, "~> 0.3.5", only: [:dev]}
